@@ -1,0 +1,81 @@
+version: '3.8'
+
+services:
+  # Node.js Backend service
+  node-backend:
+    build:
+      context: ./node-backend
+      dockerfile: Dockerfile
+    container_name: event-management-node-api
+    ports:
+      - "5001:5001"
+    depends_on:
+      - db
+    environment:
+      - PORT=5001
+      - NODE_ENV=development
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=event_management
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_DIALECT=postgres
+      - JWT_SECRET=your_jwt_secret_key_here
+      - JWT_EXPIRATION=24h
+    volumes:
+      - ./node-backend:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: unless-stopped
+    profiles:
+      - node
+
+  # Java Backend service
+  java-backend:
+    build:
+      context: ./java-backend
+      dockerfile: Dockerfile
+    container_name: event-management-java-api
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - JDBC_DATABASE_URL=jdbc:postgresql://db:5432/event_management
+      - JDBC_DATABASE_USERNAME=postgres
+      - JDBC_DATABASE_PASSWORD=postgres
+      - JWT_SECRET=your_jwt_secret_key_here
+      - CORS_ALLOWED_ORIGINS=http://localhost:5173
+    restart: unless-stopped
+    profiles:
+      - java
+
+  # Frontend service
+  frontend:
+    build:
+      context: ./react-frontend
+      dockerfile: Dockerfile
+    container_name: event-management-ui
+    ports:
+      - "5173:80"
+    depends_on:
+      - node-backend
+      - java-backend
+    restart: unless-stopped
+
+  # PostgreSQL Database
+  db:
+    image: postgres:14-alpine
+    container_name: event-management-db
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=event_management
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
