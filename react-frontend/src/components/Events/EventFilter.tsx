@@ -9,7 +9,9 @@ import {
     InputAdornment,
     IconButton
 } from '@mui/material';
-import { Search, Clear, CalendarToday } from '@mui/icons-material';
+import Search from "@mui/icons-material/Search";
+import Clear from "@mui/icons-material/Clear";
+import CalendarToday from "@mui/icons-material/CalendarToday";;
 import { EventFilter as EventFilterType } from '../../types';
 
 interface EventFilterProps {
@@ -57,7 +59,7 @@ const EventFilter: React.FC<EventFilterProps> = ({ filter, onFilterChange }) => 
 
             <form onSubmit={handleSubmit}>
                 <Grid container spacing={3}>
-                    <Grid item xs={12} sm={6} md={5} lg={6}>
+                    <Grid component="div" item xs={12} sm={6} md={5} lg={6}>
                         <TextField
                             fullWidth
                             label="Event Name"
@@ -79,7 +81,7 @@ const EventFilter: React.FC<EventFilterProps> = ({ filter, onFilterChange }) => 
                         />
                     </Grid>
 
-                    <Grid item xs={12} sm={6} md={5} lg={4}>
+                    <Grid component="div" item xs={12} sm={6} md={5} lg={4}>
                         <TextField
                             fullWidth
                             label="Event Date"
@@ -103,7 +105,7 @@ const EventFilter: React.FC<EventFilterProps> = ({ filter, onFilterChange }) => 
                         />
                     </Grid>
 
-                    <Grid item xs={12} md={2} lg={2}>
+                    <Grid component="div" item xs={12} md={2} lg={2}>
                         <Box className="flex space-x-2 h-full">
                             <Button
                                 type="submit"

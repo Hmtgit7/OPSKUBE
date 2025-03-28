@@ -14,7 +14,11 @@ import {
     Alert,
     CircularProgress,
 } from '@mui/material';
-import { Email, Lock, Person, Visibility, VisibilityOff } from '@mui/icons-material';
+import Email from "@mui/icons-material/Email";
+import Lock from "@mui/icons-material/Lock";
+import Person from "@mui/icons-material/Person";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";;
 import { RegisterCredentials } from '../../types';
 import { motion } from 'framer-motion';
 

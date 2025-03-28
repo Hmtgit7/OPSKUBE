@@ -11,12 +11,10 @@ import {
     InputAdornment,
     CircularProgress
 } from '@mui/material';
-import {
-    CalendarToday,
-    LocationOn,
-    Title,
-    Description
-} from '@mui/icons-material';
+import CalendarToday from "@mui/icons-material/CalendarToday";
+import LocationOn from "@mui/icons-material/LocationOn";
+import Title from "@mui/icons-material/Title";
+import Description from "@mui/icons-material/Description";;
 import { EventFormData, Event } from '../../types';
 import { motion } from 'framer-motion';
 
@@ -84,7 +82,7 @@ const EventForm: React.FC<EventFormProps> = ({
 
                 <form onSubmit={formik.handleSubmit}>
                     <Grid container spacing={3}>
-                        <Grid item xs={12}>
+                        <Grid component="div" item xs={12}>
                             <TextField
                                 fullWidth
                                 id="name"
@@ -111,7 +109,7 @@ const EventForm: React.FC<EventFormProps> = ({
                             />
                         </Grid>
 
-                        <Grid item xs={12} sm={6}>
+                        <Grid component="div" item xs={12} sm={6}>
                             <TextField
                                 fullWidth
                                 id="date"
@@ -140,7 +138,7 @@ const EventForm: React.FC<EventFormProps> = ({
                             />
                         </Grid>
 
-                        <Grid item xs={12} sm={6}>
+                        <Grid component="div" item xs={12} sm={6}>
                             <TextField
                                 fullWidth
                                 id="location"
@@ -167,7 +165,7 @@ const EventForm: React.FC<EventFormProps> = ({
                             />
                         </Grid>
 
-                        <Grid item xs={12}>
+                        <Grid component="div" item xs={12}>
                             <TextField
                                 fullWidth
                                 id="description"
@@ -196,7 +194,7 @@ const EventForm: React.FC<EventFormProps> = ({
                             />
                         </Grid>
 
-                        <Grid item xs={12}>
+                        <Grid component="div" item xs={12}>
                             <Box className="flex justify-end space-x-3 mt-4">
                                 <Button
                                     type="submit"

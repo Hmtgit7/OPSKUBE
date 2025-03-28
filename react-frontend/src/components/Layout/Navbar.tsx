@@ -13,7 +13,10 @@ import {
     Tooltip,
     Box
 } from '@mui/material';
-import { Menu as MenuIcon, DarkMode, LightMode, AccountCircle } from '@mui/icons-material';
+import Menu as MenuIcon from "@mui/icons-material/Menu as MenuIcon";
+import DarkMode from "@mui/icons-material/DarkMode";
+import LightMode from "@mui/icons-material/LightMode";
+import AccountCircle from "@mui/icons-material/AccountCircle";;
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 

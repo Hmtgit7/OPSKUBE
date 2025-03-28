@@ -2,12 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Card, CardContent, Typography, Box, Chip, Button } from '@mui/material';
-import { 
-  CalendarToday, 
-  LocationOn, 
-  Person, 
-  AccessTime 
-} from '@mui/icons-material';
+import CalendarToday from "@mui/icons-material/CalendarToday";
+import LocationOn from "@mui/icons-material/LocationOn";
+import Person from "@mui/icons-material/Person";
+import AccessTime from "@mui/icons-material/AccessTime";;
 import { Event } from '../../types';
 import { format } from 'date-fns';
 

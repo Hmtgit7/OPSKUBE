@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Box, Typography, Button, Container } from '@mui/material';
-import { Add } from '@mui/icons-material';
+import Add from "@mui/icons-material/Add";;
 import Layout from '../components/Layout/Layout';
 import EventList from '../components/Events/EventList';
 import EventFilter from '../components/Events/EventFilter';

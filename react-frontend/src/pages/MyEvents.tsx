@@ -11,7 +11,7 @@ import {
     CircularProgress,
     Grid
 } from '@mui/material';
-import { Add } from '@mui/icons-material';
+import Add from "@mui/icons-material/Add";;
 import Layout from '../components/Layout/Layout';
 import EventCard from '../components/Events/EventCard';
 import { Event } from '../types';
@@ -143,7 +143,7 @@ const MyEvents: React.FC = () => {
                             ) : (
                                 <Grid container spacing={4}>
                                     {createdEvents.map((event) => (
-                                        <Grid item key={event.id} xs={12} sm={6} md={4} className="h-full">
+                                        <Grid component="div" item key={event.id} xs={12} sm={6} md={4} className="h-full">
                                             <EventCard event={event} />
                                         </Grid>
                                     ))}
@@ -169,7 +169,7 @@ const MyEvents: React.FC = () => {
                             ) : (
                                 <Grid container spacing={4}>
                                     {attendingEvents.map((event) => (
-                                        <Grid item key={event.id} xs={12} sm={6} md={4} className="h-full">
+                                        <Grid component="div" item key={event.id} xs={12} sm={6} md={4} className="h-full">
                                             <EventCard event={event} />
                                         </Grid>
                                     ))}

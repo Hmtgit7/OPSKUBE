@@ -9,11 +9,9 @@ import {
     Alert,
     CircularProgress
 } from '@mui/material';
-import {
-    CheckCircle,
-    Cancel,
-    HelpOutline
-} from '@mui/icons-material';
+import CheckCircle from "@mui/icons-material/CheckCircle";
+import Cancel from "@mui/icons-material/Cancel";
+import HelpOutline from "@mui/icons-material/HelpOutline";;
 import { RsvpStatus } from '../../types';
 import { useAuth } from '../../context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Container, Typography, Box, Button } from '@mui/material';
-import { ArrowBack } from '@mui/icons-material';
+import ArrowBack from "@mui/icons-material/ArrowBack";;
 import Layout from '../components/Layout/Layout';
 import RegisterForm from '../components/Auth/RegisterForm';
 import { RegisterCredentials } from '../types';

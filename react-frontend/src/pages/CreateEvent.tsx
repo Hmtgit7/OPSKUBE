@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Container, Typography, Button, Box, Alert } from '@mui/material';
-import { ArrowBack } from '@mui/icons-material';
+import ArrowBack from "@mui/icons-material/ArrowBack";;
 import Layout from '../components/Layout/Layout';
 import EventForm from '../components/Events/EventForm';
 import { EventFormData } from '../types';

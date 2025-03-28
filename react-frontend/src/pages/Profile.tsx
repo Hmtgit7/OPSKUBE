@@ -11,12 +11,10 @@ import {
     Avatar,
     Grid
 } from '@mui/material';
-import {
-    Person,
-    Email,
-    CalendarMonth,
-    Logout
-} from '@mui/icons-material';
+import Person from "@mui/icons-material/Person";
+import Email from "@mui/icons-material/Email";
+import CalendarMonth from "@mui/icons-material/CalendarMonth";
+import Logout from "@mui/icons-material/Logout";;
 import Layout from '../components/Layout/Layout';
 import { useAuth } from '../context/AuthContext';
 import { motion } from 'framer-motion';
@@ -79,7 +77,7 @@ const Profile: React.FC = () => {
                         <Divider className="my-6 dark:border-gray-700" />
 
                         <Grid container spacing={3}>
-                            <Grid item xs={12} sm={6}>
+                            <Grid component="div" item xs={12} sm={6}>
                                 <Typography
                                     variant="h6"
                                     className="text-gray-900 dark:text-white font-medium mb-4"
@@ -129,7 +127,7 @@ const Profile: React.FC = () => {
                                 </Box>
                             </Grid>
 
-                            <Grid item xs={12} sm={6}>
+                            <Grid component="div" item xs={12} sm={6}>
                                 <Typography
                                     variant="h6"
                                     className="text-gray-900 dark:text-white font-medium mb-4"
