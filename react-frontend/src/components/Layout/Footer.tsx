@@ -9,7 +9,7 @@ const Footer: React.FC = () => {
         <Box component="footer" className="bg-gray-100 dark:bg-gray-800 py-8 mt-auto">
             <Container maxWidth="lg">
                 <Grid container spacing={4}>
-                    <Grid component="div" item xs={12} sm={6} md={3}>
+                    <Grid item xs={12} sm={6} md={3}>
                         <Typography variant="h6" className="text-gray-900 dark:text-white font-bold mb-4">
                             EventHub
                         </Typography>
@@ -18,7 +18,7 @@ const Footer: React.FC = () => {
                         </Typography>
                     </Grid>
 
-                    <Grid component="div" item xs={12} sm={6} md={3}>
+                    <Grid item xs={12} sm={6} md={3}>
                         <Typography variant="h6" className="text-gray-900 dark:text-white font-bold mb-4">
                             Quick Links
                         </Typography>
@@ -41,7 +41,7 @@ const Footer: React.FC = () => {
                         </ul>
                     </Grid>
 
-                    <Grid component="div" item xs={12} sm={6} md={3}>
+                    <Grid item xs={12} sm={6} md={3}>
                         <Typography variant="h6" className="text-gray-900 dark:text-white font-bold mb-4">
                             Support
                         </Typography>
@@ -64,7 +64,7 @@ const Footer: React.FC = () => {
                         </ul>
                     </Grid>
 
-                    <Grid component="div" item xs={12} sm={6} md={3}>
+                    <Grid item xs={12} sm={6} md={3}>
                         <Typography variant="h6" className="text-gray-900 dark:text-white font-bold mb-4">
                             Social
                         </Typography>

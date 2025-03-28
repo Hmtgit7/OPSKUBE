@@ -59,7 +59,7 @@ const EventFilter: React.FC<EventFilterProps> = ({ filter, onFilterChange }) => 
 
             <form onSubmit={handleSubmit}>
                 <Grid container spacing={3}>
-                    <Grid component="div" item xs={12} sm={6} md={5} lg={6}>
+                    <Grid item xs={12} sm={6} md={5} lg={6}>
                         <TextField
                             fullWidth
                             label="Event Name"
@@ -81,7 +81,7 @@ const EventFilter: React.FC<EventFilterProps> = ({ filter, onFilterChange }) => 
                         />
                     </Grid>
 
-                    <Grid component="div" item xs={12} sm={6} md={5} lg={4}>
+                    <Grid item xs={12} sm={6} md={5} lg={4}>
                         <TextField
                             fullWidth
                             label="Event Date"
@@ -105,7 +105,7 @@ const EventFilter: React.FC<EventFilterProps> = ({ filter, onFilterChange }) => 
                         />
                     </Grid>
 
-                    <Grid component="div" item xs={12} md={2} lg={2}>
+                    <Grid item xs={12} md={2} lg={2}>
                         <Box className="flex space-x-2 h-full">
                             <Button
                                 type="submit"

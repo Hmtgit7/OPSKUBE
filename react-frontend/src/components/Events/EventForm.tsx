@@ -82,7 +82,7 @@ const EventForm: React.FC<EventFormProps> = ({
 
                 <form onSubmit={formik.handleSubmit}>
                     <Grid container spacing={3}>
-                        <Grid component="div" item xs={12}>
+                        <Grid item xs={12}>
                             <TextField
                                 fullWidth
                                 id="name"
@@ -109,7 +109,7 @@ const EventForm: React.FC<EventFormProps> = ({
                             />
                         </Grid>
 
-                        <Grid component="div" item xs={12} sm={6}>
+                        <Grid item xs={12} sm={6}>
                             <TextField
                                 fullWidth
                                 id="date"
@@ -138,7 +138,7 @@ const EventForm: React.FC<EventFormProps> = ({
                             />
                         </Grid>
 
-                        <Grid component="div" item xs={12} sm={6}>
+                        <Grid item xs={12} sm={6}>
                             <TextField
                                 fullWidth
                                 id="location"
@@ -165,7 +165,7 @@ const EventForm: React.FC<EventFormProps> = ({
                             />
                         </Grid>
 
-                        <Grid component="div" item xs={12}>
+                        <Grid item xs={12}>
                             <TextField
                                 fullWidth
                                 id="description"
@@ -194,7 +194,7 @@ const EventForm: React.FC<EventFormProps> = ({
                             />
                         </Grid>
 
-                        <Grid component="div" item xs={12}>
+                        <Grid item xs={12}>
                             <Box className="flex justify-end space-x-3 mt-4">
                                 <Button
                                     type="submit"

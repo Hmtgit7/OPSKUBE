@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosRequestConfig, InternalAxiosRequestConfig, AxiosResponse  } from 'axios';
 import { ApiError } from '../types';
 
 // Create axios instance with default config

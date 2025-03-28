@@ -135,7 +135,7 @@ const EventDetails: React.FC = () => {
                     </Button>
 
                     <Grid container spacing={4}>
-                        <Grid component="div" item xs={12} md={8}>
+                        <Grid item xs={12} md={8}>
                             <motion.div
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
@@ -164,7 +164,7 @@ const EventDetails: React.FC = () => {
                         </Grid>
 
                         {isOrganizer && (
-                            <Grid component="div" item xs={12} md={4} className="flex justify-start md:justify-end">
+                            <Grid item xs={12} md={4} className="flex justify-start md:justify-end">
                                 <Box className="flex space-x-2">
                                     <Button
                                         component={Link}
@@ -191,7 +191,7 @@ const EventDetails: React.FC = () => {
                 </Box>
 
                 <Grid container spacing={4}>
-                    <Grid component="div" item xs={12} md={8}>
+                    <Grid item xs={12} md={8}>
                         {/* Event Details */}
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
@@ -208,7 +208,7 @@ const EventDetails: React.FC = () => {
                                     </Typography>
 
                                     <Grid container spacing={3}>
-                                        <Grid component="div" item xs={12} sm={6}>
+                                        <Grid item xs={12} sm={6}>
                                             <Box className="flex items-center text-gray-700 dark:text-gray-300 mb-3">
                                                 <CalendarToday className="mr-2" />
                                                 <Typography variant="body1">{formattedDate}</Typography>
@@ -220,7 +220,7 @@ const EventDetails: React.FC = () => {
                                             </Box>
                                         </Grid>
 
-                                        <Grid component="div" item xs={12} sm={6}>
+                                        <Grid item xs={12} sm={6}>
                                             <Box className="flex items-center text-gray-700 dark:text-gray-300 mb-3">
                                                 <LocationOn className="mr-2" />
                                                 <Typography variant="body1">{event.location}</Typography>
@@ -257,7 +257,7 @@ const EventDetails: React.FC = () => {
                         </motion.div>
                     </Grid>
 
-                    <Grid component="div" item xs={12} md={4}>
+                    <Grid item xs={12} md={4}>
                         {/* RSVP Component */}
                         {!isOrganizer && (
                             <RsvpComponent
