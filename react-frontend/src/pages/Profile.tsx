@@ -77,7 +77,7 @@ const Profile: React.FC = () => {
                         <Divider className="my-6 dark:border-gray-700" />
 
                         <Grid container spacing={3}>
-                            <Grid item xs={12} sm={6}>
+                            <Grid component="div" item xs={12} sm={6}>
                                 <Typography
                                     variant="h6"
                                     className="text-gray-900 dark:text-white font-medium mb-4"
@@ -127,7 +127,7 @@ const Profile: React.FC = () => {
                                 </Box>
                             </Grid>
 
-                            <Grid item xs={12} sm={6}>
+                            <Grid component="div" item xs={12} sm={6}>
                                 <Typography
                                     variant="h6"
                                     className="text-gray-900 dark:text-white font-medium mb-4"

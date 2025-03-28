@@ -61,7 +61,7 @@ const EventList: React.FC<EventListProps> = ({
     <Box>
       <Grid container spacing={4}>
         {events.map((event) => (
-          <Grid item key={event.id} xs={12} sm={6} md={4} className="h-full">
+          <Grid component="div" item key={event.id} xs={12} sm={6} md={4} className="h-full">
             <EventCard event={event} />
           </Grid>
         ))}

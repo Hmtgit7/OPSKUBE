@@ -132,7 +132,7 @@ const Home: React.FC = () => {
             animate="visible"
           >
             <Grid container spacing={4}>
-              <Grid item xs={12} sm={6} md={3}>
+              <Grid component="div" item xs={12} sm={6} md={3}>
                 <motion.div variants={itemVariants}>
                   <Paper className="h-full bg-white dark:bg-gray-800 shadow-md p-6 text-center">
                     <Box className="flex justify-center mb-4">
@@ -183,7 +183,7 @@ const Home: React.FC = () => {
           </motion.div>
 
           <Grid container spacing={6}>
-            <Grid item xs={12} md={4}>
+            <Grid component="div" item xs={12} md={4}>
               <Card className="h-full bg-white dark:bg-gray-800 shadow-md hover:shadow-lg transition-shadow duration-300">
                 <CardContent className="p-6">
                   <Box className="text-center mb-4">
@@ -210,7 +210,7 @@ const Home: React.FC = () => {
               </Card>
             </Grid>
 
-            <Grid item xs={12} md={4}>
+            <Grid component="div" item xs={12} md={4}>
               <Card className="h-full bg-white dark:bg-gray-800 shadow-md hover:shadow-lg transition-shadow duration-300">
                 <CardContent className="p-6">
                   <Box className="text-center mb-4">
@@ -237,7 +237,7 @@ const Home: React.FC = () => {
               </Card>
             </Grid>
 
-            <Grid item xs={12} md={4}>
+            <Grid component="div" item xs={12} md={4}>
               <Card className="h-full bg-white dark:bg-gray-800 shadow-md hover:shadow-lg transition-shadow duration-300">
                 <CardContent className="p-6">
                   <Box className="text-center mb-4">
