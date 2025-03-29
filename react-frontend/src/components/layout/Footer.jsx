@@ -1,5 +1,11 @@
 import { Link } from 'react-router-dom';
 import { CalendarIcon } from '@heroicons/react/outline';
+import GitHubIcon from '@mui/icons-material/GitHub';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import TwitterIcon from '@mui/icons-material/Twitter';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import InstagramIcon from '@mui/icons-material/Instagram';
+import MailIcon from '@mui/icons-material/Mail';
 
 const Footer = () => {
     const currentYear = new Date().getFullYear();
@@ -88,61 +94,67 @@ const Footer = () => {
                                 Connect
                             </h3>
                             <ul className="space-y-2">
-                          <li>
+                                <li className="flex items-center">
                                     <a
-                                        href="https://GitHub.com/Hmtgit7"
+                                        href="https://github.com/Hmtgit7"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                                        className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors flex items-center"
                                     >
+                                        <GitHubIcon className="w-6 h-6 mr-2" />
                                         GitHub
                                     </a>
-                                </li>  
- <li>
+                                </li>
+                                <li className="flex items-center">
                                     <a
-                                        href="https://in.linkedin.com/hemant-gehlod"
+                                        href="https://linkedin.com/in/hemant-gehlod"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                                        className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors flex items-center"
                                     >
+                                        <LinkedInIcon className="w-6 h-6 mr-2" />
                                         Linkedin
                                     </a>
                                 </li>
-     <li>
+                                <li className="flex items-center">
                                     <a
                                         href="https://twitter.com/Gehlodhemant"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                                        className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors flex items-center"
                                     >
+                                        <TwitterIcon className="w-6 h-6 mr-2" />
                                         Twitter
                                     </a>
                                 </li>
-                                <li>
+                                <li className="flex items-center">
                                     <a
                                         href="https://facebook.com"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                                        className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors flex items-center"
                                     >
+                                        <FacebookIcon className="w-6 h-6 mr-2" />
                                         Facebook
                                     </a>
                                 </li>
-                                <li>
+                                <li className="flex items-center">
                                     <a
                                         href="https://instagram.com/hemant_gehlod"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                                        className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors flex items-center"
                                     >
+                                        <InstagramIcon className="w-6 h-6 mr-2" />
                                         Instagram
                                     </a>
                                 </li>
-                                <li>
+                                <li className="flex items-center">
                                     <a
                                         href="mailto: hmtloharcoding3579@gmail.com"
-                                        className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                                        className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors flex items-center"
                                     >
+                                        <MailIcon className="w-6 h-6 mr-2" />
                                         Email Us
                                     </a>
                                 </li>
@@ -154,7 +166,7 @@ const Footer = () => {
                 {/* Bottom section */}
                 <div className="mt-12 pt-8 border-t border-gray-200 dark:border-dark-700 text-center text-gray-600 dark:text-gray-400">
                     <p>
-                        &copy; {currentYear} EventHub by spark_developie. All rights reserved.
+                        &copy; {currentYear} EventHub by <i className="text-primary-600 dark:text-primary-400"><a href="https://hemant-gehlod.netlify.app" target="_blank" rel="noopener noreferrer">spark_developie</a></i>. All rights reserved.
                     </p>
                 </div>
             </div>
