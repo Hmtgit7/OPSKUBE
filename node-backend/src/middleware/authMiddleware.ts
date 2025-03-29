@@ -1,3 +1,4 @@
+// src/middleware/authMiddleware.ts
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { User } from '../models';
@@ -20,7 +21,15 @@ export const authenticateToken = async (req: Request, res: Response, next: NextF
             return res.status(401).json({ message: 'Access denied. No token provided.' });
         }
 
-        const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { id: number };
+        const secretKey = process.env.JWT_SECRET as string;
+        if (!secretKey) {
+            console.error('WARNING: JWT_SECRET is not defined in environment variables.');
+        }
+
+        const decoded = jwt.verify(
+            token,
+            secretKey || 'fallback_secret_for_development_only'
+        ) as { id: number };
 
         // Find user by id
         const user = await User.findByPk(decoded.id);
@@ -33,6 +42,7 @@ export const authenticateToken = async (req: Request, res: Response, next: NextF
         req.user = user;
         next();
     } catch (error) {
+        console.error('Authentication error:', error);
         return res.status(403).json({ message: 'Invalid token.' });
     }
 };
@@ -48,7 +58,11 @@ export const optionalAuthenticateToken = async (req: Request, res: Response, nex
             return;
         }
 
-        const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { id: number };
+        const secretKey = process.env.JWT_SECRET as string;
+        const decoded = jwt.verify(
+            token,
+            secretKey || 'fallback_secret_for_development_only'
+        ) as { id: number };
 
         // Find user by id
         const user = await User.findByPk(decoded.id);

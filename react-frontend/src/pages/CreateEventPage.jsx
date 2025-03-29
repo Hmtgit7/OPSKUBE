@@ -1,3 +1,4 @@
+// src/pages/CreateEventPage.jsx
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeftIcon } from '@heroicons/react/outline';
@@ -12,6 +13,7 @@ const CreateEventPage = () => {
     const navigate = useNavigate();
     const { state: { isAuthenticated, user } } = useAuth();
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState(null);
 
     // Set initial values for form
     const initialValues = {
@@ -32,6 +34,7 @@ const CreateEventPage = () => {
     // Handle form submission
     const handleSubmit = async (values) => {
         setIsSubmitting(true);
+        setError(null);
 
         try {
             // Create event
@@ -43,7 +46,11 @@ const CreateEventPage = () => {
             // Navigate to the event details page
             navigate(`/events/${event.id}`);
         } catch (error) {
-            toast.error(error.message || 'Failed to create event');
+            const errorMessage = error.message || 'Failed to create event';
+            setError(errorMessage);
+            toast.error(errorMessage);
+            console.error('Create event error:', error);
+        } finally {
             setIsSubmitting(false);
         }
     };
@@ -58,6 +65,12 @@ const CreateEventPage = () => {
 
                 <div className="max-w-3xl mx-auto">
                     <h1 className="text-3xl font-bold mb-6">Create New Event</h1>
+
+                    {error && (
+                        <div className="bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 p-4 rounded-lg mb-6">
+                            {error}
+                        </div>
+                    )}
 
                     <p className="text-gray-600 dark:text-gray-400 mb-6">
                         Fill out the form below to create your event. All fields are required.

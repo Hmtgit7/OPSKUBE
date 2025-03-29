@@ -1,12 +1,23 @@
+// src/services/authService.js
 import api, { getBackendType } from './api';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 // Register a new user
 export const register = async (credentials) => {
     try {
         const response = await api.post('/auth/register', credentials);
+
+        // Save token and user data if they exist in the response
+        const { token, user } = response.data;
+
+        if (token && user) {
+            localStorage.setItem('token', token);
+            localStorage.setItem('user', JSON.stringify(user));
+        }
+
         return response.data;
     } catch (error) {
+        console.error('Registration error:', error);
         throw error;
     }
 };
@@ -19,13 +30,17 @@ export const login = async (credentials) => {
         // Save token and user data
         const { token, user } = response.data;
 
-        if (token) {
+        if (token && user) {
             localStorage.setItem('token', token);
             localStorage.setItem('user', JSON.stringify(user));
+        } else {
+            console.error('Login response missing token or user data:', response.data);
+            throw new Error('Invalid login response from server');
         }
 
         return response.data;
     } catch (error) {
+        console.error('Login error:', error);
         throw error;
     }
 };
@@ -36,10 +51,12 @@ export const getCurrentUser = async () => {
         const response = await api.get('/auth/profile');
 
         // Update stored user data with the latest
-        localStorage.setItem('user', JSON.stringify(response.data.user || response.data));
+        const userData = getBackendType() === 'node' ? response.data.user : response.data;
+        localStorage.setItem('user', JSON.stringify(userData));
 
-        return getBackendType() === 'node' ? response.data.user : response.data;
+        return userData;
     } catch (error) {
+        console.error('Get current user error:', error);
         throw error;
     }
 };
@@ -59,6 +76,7 @@ export const isTokenValid = () => {
         // Check if token is expired
         return decoded.exp > currentTime;
     } catch (error) {
+        console.error('Token validation error:', error);
         return false;
     }
 };
@@ -71,6 +89,7 @@ export const getStoredUser = () => {
         try {
             return JSON.parse(user);
         } catch (error) {
+            console.error('Error parsing stored user:', error);
             return null;
         }
     }
@@ -82,5 +101,4 @@ export const getStoredUser = () => {
 export const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    window.location.href = '/login';
 };

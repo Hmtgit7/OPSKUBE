@@ -1,3 +1,4 @@
+// src/controllers/eventController.ts
 import { Request, Response } from 'express';
 import { Op } from 'sequelize';
 import { Event, User } from '../models';
@@ -63,6 +64,7 @@ export const getAllEvents = async (req: Request, res: Response) => {
             }
         });
     } catch (error) {
+        console.error('Error in getAllEvents:', error);
         return handleError(error, res);
     }
 };
@@ -96,6 +98,12 @@ export const getEventById = async (req: Request, res: Response) => {
 export const createEvent = async (req: Request, res: Response) => {
     try {
         const { name, description, date, location } = req.body;
+
+        // Make sure req.user exists and has an id
+        if (!req.user || !req.user.id) {
+            throw new AppError('Authentication required', 401);
+        }
+
         const userId = req.user.id;
 
         const event = await Event.create({
@@ -106,11 +114,23 @@ export const createEvent = async (req: Request, res: Response) => {
             userId
         });
 
+        // After successful creation, fetch the complete event with organizer info
+        const createdEvent = await Event.findByPk(event.id, {
+            include: [
+                {
+                    model: User,
+                    as: 'organizer',
+                    attributes: ['id', 'username']
+                }
+            ]
+        });
+
         return res.status(201).json({
             message: 'Event created successfully',
-            event
+            event: createdEvent
         });
     } catch (error) {
+        console.error('Error in createEvent:', error);
         return handleError(error, res);
     }
 };
@@ -142,9 +162,20 @@ export const updateEvent = async (req: Request, res: Response) => {
             location
         });
 
+        // Get updated event with organizer info
+        const updatedEvent = await Event.findByPk(id, {
+            include: [
+                {
+                    model: User,
+                    as: 'organizer',
+                    attributes: ['id', 'username']
+                }
+            ]
+        });
+
         return res.status(200).json({
             message: 'Event updated successfully',
-            event
+            event: updatedEvent
         });
     } catch (error) {
         return handleError(error, res);
@@ -176,6 +207,30 @@ export const deleteEvent = async (req: Request, res: Response) => {
             message: 'Event deleted successfully'
         });
     } catch (error) {
+        return handleError(error, res);
+    }
+};
+
+// Get events created by current user
+export const getMyEvents = async (req: Request, res: Response) => {
+    try {
+        const userId = req.user.id;
+
+        const events = await Event.findAll({
+            where: { userId },
+            include: [
+                {
+                    model: User,
+                    as: 'organizer',
+                    attributes: ['id', 'username']
+                }
+            ],
+            order: [['date', 'ASC']]
+        });
+
+        return res.status(200).json(events);
+    } catch (error) {
+        console.error('Error in getMyEvents:', error);
         return handleError(error, res);
     }
 };

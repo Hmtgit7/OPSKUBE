@@ -1,3 +1,4 @@
+// src/services/rsvpService.js
 import api, { getBackendType } from './api';
 
 // Create or update RSVP for an event
@@ -19,6 +20,7 @@ export const createRsvp = async (eventId, status) => {
             rsvp: response.data.rsvp
         };
     } catch (error) {
+        console.error(`RSVP to event ${eventId} error:`, error);
         throw error;
     }
 };
@@ -31,6 +33,7 @@ export const getEventRsvps = async (eventId) => {
         // Handle different response formats between backends
         return getBackendType() === 'node' ? response.data.rsvps : response.data.rsvps;
     } catch (error) {
+        console.error(`Get RSVPs for event ${eventId} error:`, error);
         throw error;
     }
 };
@@ -49,9 +52,10 @@ export const getUserRsvpStatus = async (eventId) => {
         }
     } catch (error) {
         // If error is 404, it means no RSVP found, which is ok
-        if (error.response && error.response.status === 404) {
+        if (error.status === 404) {
             return null;
         }
+        console.error(`Get RSVP status for event ${eventId} error:`, error);
         throw error;
     }
 };
@@ -62,6 +66,7 @@ export const deleteRsvp = async (eventId) => {
         const response = await api.delete(`/events/${eventId}/rsvp`);
         return response.data;
     } catch (error) {
+        console.error(`Delete RSVP for event ${eventId} error:`, error);
         throw error;
     }
 };

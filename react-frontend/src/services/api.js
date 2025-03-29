@@ -1,3 +1,4 @@
+// src/services/api.js
 import axios from 'axios';
 
 // Get backend configuration from environment variables or use default
@@ -10,6 +11,7 @@ const api = axios.create({
     headers: {
         'Content-Type': 'application/json',
     },
+    timeout: 10000, // 10 seconds timeout
 });
 
 // Request interceptor for adding auth token
@@ -21,20 +23,28 @@ api.interceptors.request.use(
         }
         return config;
     },
-    (error) => Promise.reject(error)
+    (error) => {
+        console.error('API request error:', error);
+        return Promise.reject(error);
+    }
 );
 
 // Response interceptor for handling errors
 api.interceptors.response.use(
     (response) => response,
     (error) => {
+        // Log detailed error information for debugging
+        console.error('API response error:', error);
+
         // Handle token expiration
         if (error.response && error.response.status === 401) {
+            console.warn('Authentication error detected, clearing credentials');
+
             // Clear local storage if unauthorized
             localStorage.removeItem('token');
             localStorage.removeItem('user');
 
-            // Reload the page to reset the application state
+            // Redirect to login page if not already there
             if (window.location.pathname !== '/login' && window.location.pathname !== '/register') {
                 window.location.href = '/login';
             }
@@ -44,15 +54,30 @@ api.interceptors.response.use(
         const errorMessage =
             error.response?.data?.message ||
             error.response?.data?.error ||
-            'Something went wrong';
+            'Something went wrong. Please try again.';
 
-        return Promise.reject({ message: errorMessage, errors: error.response?.data?.errors });
+        return Promise.reject({
+            message: errorMessage,
+            errors: error.response?.data?.errors,
+            status: error.response?.status
+        });
     }
 );
 
 // Get current backend type (used for conditional handling of responses)
 export const getBackendType = () => {
     return API_BACKEND;
+};
+
+// Function to check if API is available (health check)
+export const checkApiHealth = async () => {
+    try {
+        const response = await api.get('/health');
+        return response.data;
+    } catch (error) {
+        console.error('API health check failed:', error);
+        throw error;
+    }
 };
 
 export default api;

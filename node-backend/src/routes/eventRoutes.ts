@@ -1,10 +1,12 @@
+// src/routes/eventRoutes.ts
 import { Router } from 'express';
 import {
     getAllEvents,
     getEventById,
     createEvent,
     updateEvent,
-    deleteEvent
+    deleteEvent,
+    getMyEvents
 } from '../controllers/eventController';
 import {
     createEventValidation,
@@ -21,6 +23,9 @@ router.get('/', validatePagination, optionalAuthenticateToken, getAllEvents);
 
 // Get single event by id (optional authentication)
 router.get('/:id', optionalAuthenticateToken, getEventById);
+
+// Get events created by the authenticated user
+router.get('/my-events', authenticateToken, getMyEvents);
 
 // Create new event (requires authentication)
 router.post('/', authenticateToken, validate(createEventValidation), createEvent);

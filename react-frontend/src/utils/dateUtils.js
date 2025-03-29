@@ -1,3 +1,4 @@
+// src/utils/dateUtils.js
 import { format, formatDistanceToNow, isPast, isFuture, parseISO } from 'date-fns';
 
 /**
@@ -14,7 +15,7 @@ export const formatDate = (date, formatString = 'MMM dd, yyyy') => {
         return format(dateObj, formatString);
     } catch (error) {
         console.error('Error formatting date:', error);
-        return '';
+        return String(date);
     }
 };
 
@@ -31,7 +32,7 @@ export const formatDateTime = (date) => {
         return format(dateObj, 'MMM dd, yyyy h:mm a');
     } catch (error) {
         console.error('Error formatting date and time:', error);
-        return '';
+        return String(date);
     }
 };
 
@@ -48,7 +49,7 @@ export const formatRelativeTime = (date) => {
         return formatDistanceToNow(dateObj, { addSuffix: true });
     } catch (error) {
         console.error('Error formatting relative time:', error);
-        return '';
+        return String(date);
     }
 };
 

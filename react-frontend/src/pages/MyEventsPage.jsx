@@ -1,3 +1,4 @@
+// src/pages/MyEventsPage.jsx
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Tab } from '@headlessui/react';
@@ -7,6 +8,7 @@ import { useAuth } from '../context/AuthContext';
 import Layout from '../components/layout/Layout';
 import EventList from '../components/events/EventList';
 import { toast } from 'react-toastify';
+import LoadingSpinner from '../components/ui/LoadingSpinner';
 
 const MyEventsPage = () => {
     const navigate = useNavigate();
@@ -31,14 +33,25 @@ const MyEventsPage = () => {
     useEffect(() => {
         const fetchCreatedEvents = async () => {
             setCreatedLoading(true);
+            setCreatedError(null);
 
             try {
                 const data = await getMyEvents();
-                setCreatedEvents(Array.isArray(data) ? data : []);
-                setCreatedError(null);
+                console.log('My events data:', data);
+
+                // Handle different response formats
+                let eventsArray = data;
+                if (Array.isArray(data.events)) {
+                    eventsArray = data.events;
+                } else if (data.content && Array.isArray(data.content)) {
+                    eventsArray = data.content;
+                }
+
+                setCreatedEvents(Array.isArray(eventsArray) ? eventsArray : []);
             } catch (err) {
-                setCreatedError('Failed to load your created events');
-                console.error(err);
+                console.error('Failed to load created events:', err);
+                setCreatedError('Failed to load your created events. Please try again.');
+                toast.error('Failed to load your created events');
             } finally {
                 setCreatedLoading(false);
             }
@@ -53,14 +66,25 @@ const MyEventsPage = () => {
     useEffect(() => {
         const fetchAttendingEvents = async () => {
             setAttendingLoading(true);
+            setAttendingError(null);
 
             try {
                 const data = await getAttendingEvents();
-                setAttendingEvents(Array.isArray(data) ? data : []);
-                setAttendingError(null);
+                console.log('Attending events data:', data);
+
+                // Handle different response formats
+                let eventsArray = data;
+                if (Array.isArray(data.events)) {
+                    eventsArray = data.events;
+                } else if (data.content && Array.isArray(data.content)) {
+                    eventsArray = data.content;
+                }
+
+                setAttendingEvents(Array.isArray(eventsArray) ? eventsArray : []);
             } catch (err) {
-                setAttendingError('Failed to load events you\'re attending');
-                console.error(err);
+                console.error('Failed to load attending events:', err);
+                setAttendingError('Failed to load events you\'re attending. Please try again.');
+                toast.error('Failed to load events you\'re attending');
             } finally {
                 setAttendingLoading(false);
             }
@@ -70,6 +94,16 @@ const MyEventsPage = () => {
             fetchAttendingEvents();
         }
     }, [isAuthenticated]);
+
+    if (!isAuthenticated) {
+        return (
+            <Layout>
+                <div className="container-custom py-12">
+                    <LoadingSpinner text="Redirecting to login..." />
+                </div>
+            </Layout>
+        );
+    }
 
     return (
         <Layout>

@@ -1,6 +1,7 @@
+// src/components/events/EventForm.jsx
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { motion } from 'framer-motion';
-import { 
+import {
   ClockIcon,
   LocationMarkerIcon,
   DocumentTextIcon,
@@ -43,14 +44,84 @@ const EventForm = ({ initialValues, onSubmit, isSubmitting, isEdit = false }) =>
                     <TagIcon className="h-5 w-5 text-gray-400" />
                   </div>
                   <Field
+                    type="text"
+                    name="name"
+                    id="name"
+                    placeholder="Give your event a name..."
+                    className={`input pl-10 ${touched.name && errors.name ? 'input-error' : ''
+                      }`}
+                  />
+                </div>
+                <ErrorMessage
+                  name="name"
+                  component="div"
+                  className="error-text"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="date" className="label">
+                  Event Date and Time
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <ClockIcon className="h-5 w-5 text-gray-400" />
+                  </div>
+                  <Field
+                    type="datetime-local"
+                    name="date"
+                    id="date"
+                    className={`input pl-10 ${touched.date && errors.date ? 'input-error' : ''
+                      }`}
+                  />
+                </div>
+                <ErrorMessage
+                  name="date"
+                  component="div"
+                  className="error-text"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="location" className="label">
+                  Event Location
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <LocationMarkerIcon className="h-5 w-5 text-gray-400" />
+                  </div>
+                  <Field
+                    type="text"
+                    name="location"
+                    id="location"
+                    placeholder="Where will the event take place?"
+                    className={`input pl-10 ${touched.location && errors.location ? 'input-error' : ''
+                      }`}
+                  />
+                </div>
+                <ErrorMessage
+                  name="location"
+                  component="div"
+                  className="error-text"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="description" className="label">
+                  Event Description
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 pt-3 pointer-events-none">
+                    <DocumentTextIcon className="h-5 w-5 text-gray-400" />
+                  </div>
+                  <Field
                     as="textarea"
                     name="description"
                     id="description"
                     rows="5"
                     placeholder="Provide details about your event..."
-                    className={`input pl-10 ${
-                      touched.description && errors.description ? 'input-error' : ''
-                    }`}
+                    className={`input pl-10 ${touched.description && errors.description ? 'input-error' : ''
+                      }`}
                   />
                 </div>
                 <ErrorMessage

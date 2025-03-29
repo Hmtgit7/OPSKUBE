@@ -1,7 +1,9 @@
+// src/controllers/authController.ts
 import { Request, Response } from 'express';
 import { User } from '../models';
 import { generateToken } from '../utils/jwtUtils';
 import { AppError, handleError } from '../utils/errorUtils';
+import { Op } from 'sequelize';
 
 export const register = async (req: Request, res: Response) => {
     try {
@@ -10,7 +12,7 @@ export const register = async (req: Request, res: Response) => {
         // Check if user with email or username already exists
         const existingUser = await User.findOne({
             where: {
-                [Symbol.for('sequelize.or')]: [{ email }, { username }]
+                [Op.or]: [{ email }, { username }]
             }
         });
 
@@ -22,7 +24,7 @@ export const register = async (req: Request, res: Response) => {
         const user = await User.create({
             username,
             email,
-            password
+            password // Password will be hashed in User model hooks
         });
 
         // Generate JWT token
