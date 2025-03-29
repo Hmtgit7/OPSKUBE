@@ -88,7 +88,27 @@ const Footer = () => {
                                 Connect
                             </h3>
                             <ul className="space-y-2">
-                                <li>
+                          <li>
+                                    <a
+                                        href="https://GitHub.com/Hmtgit7"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                                    >
+                                        GitHub
+                                    </a>
+                                </li>  
+ <li>
+                                    <a
+                                        href="https://in.linkedin.com/hemant-gehlod"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                                    >
+                                        Linkedin
+                                    </a>
+                                </li>
+     <li>
                                     <a
                                         href="https://twitter.com/Gehlodhemant"
                                         target="_blank"
