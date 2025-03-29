@@ -43,8 +43,7 @@ This is the React frontend for the EventHub application, providing a modern and 
    ```
 
 3. Create a `.env` file:
-   ```
- REACT_APP_API_BASE_URL=http://localhost:5001/api
+   ``` REACT_APP_API_BASE_URL=http://localhost:5001/api
 REACT_APP_API_BACKEND=node
    ```
 
@@ -53,7 +52,7 @@ REACT_APP_API_BACKEND=node
    npm start
    ```
 
-5. Open your browser and navigate to `http://localhost:5173`
+5. Open your browser and navigate to `http://localhost:3000`
 
 ## Building for Production
 
@@ -65,7 +64,7 @@ This will generate optimized files in the `dist` directory.
 
 ## Available Scripts
 
-- `npm run dev` - Start development server
+- `npm start` - Start development server
 - `npm run build` - Build for production
 - `npm run preview` - Preview production build
 
