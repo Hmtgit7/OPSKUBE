@@ -90,7 +90,7 @@ const Footer = () => {
                             <ul className="space-y-2">
                                 <li>
                                     <a
-                                        href="https://twitter.com"
+                                        href="https://twitter.com/Gehlodhemant"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
@@ -110,7 +110,7 @@ const Footer = () => {
                                 </li>
                                 <li>
                                     <a
-                                        href="https://instagram.com"
+                                        href="https://instagram.com/hemant_gehlod"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
@@ -120,7 +120,7 @@ const Footer = () => {
                                 </li>
                                 <li>
                                     <a
-                                        href="mailto:contact@example.com"
+                                        href="mailto: hmtloharcoding3579@gmail.com"
                                         className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
                                     >
                                         Email Us
@@ -134,7 +134,7 @@ const Footer = () => {
                 {/* Bottom section */}
                 <div className="mt-12 pt-8 border-t border-gray-200 dark:border-dark-700 text-center text-gray-600 dark:text-gray-400">
                     <p>
-                        &copy; {currentYear} EventHub. All rights reserved.
+                        &copy; {currentYear} EventHub by spark_developie. All rights reserved.
                     </p>
                 </div>
             </div>
