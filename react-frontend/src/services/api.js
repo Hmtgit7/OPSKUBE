@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 // Get backend configuration from environment variables or use default
-const API_BASE_URL = 'http://localhost:5000/api';
-const API_BACKEND = 'node'; // 'node' or 'java'
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+const API_BACKEND = process.env.REACT_APP_API_BACKEND; // 'node' or 'java'
 
 // Create axios instance with default config
 const api = axios.create({
