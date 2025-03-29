@@ -1,32 +1,27 @@
-# EventHub - Modern Event Management UI
+# EventHub - React Frontend
 
-This is a modern responsive React frontend for the EventHub application, a full-featured event management system. The UI is designed to work with both the Node.js and Java backends.
+This is the React frontend for the EventHub application, providing a modern and responsive UI for managing events.
 
 ## Features
 
-- **Responsive Design**: Fully responsive UI that works on mobile, tablet, and desktop
-- **Dark/Light Mode**: Automatic theme detection with manual toggle option
-- **Modern UI**: Built with Tailwind CSS, Material UI, and Framer Motion
+- **Responsive Design**: Works on mobile, tablet, and desktop
+- **Dark/Light Mode**: Automatic theme detection with manual toggle
 - **Authentication**: Complete user registration, login, and profile management
 - **Event Management**: Create, edit, view, and delete events
 - **RSVP System**: RSVP to events with different status options
 - **Filtering & Search**: Search and filter events by name and date
-- **My Events**: View events you've created and events you're attending
 
 ## Tech Stack
 
-- **React 18** - Frontend library
-- **Vite** - Build tool and development server
-- **React Router 6** - Client-side routing
-- **Tailwind CSS** - Utility-first CSS framework
-- **Material UI** - UI component library
-- **Framer Motion** - Animation library
-- **Axios** - HTTP client
-- **Formik & Yup** - Form handling and validation
-- **React Toastify** - Toast notifications
-- **JWT Decode** - JWT token handling
-- **Date-fns** - Date manipulation library
-- **Heroicons** - Icon library
+- **React 18**: Frontend library
+- **React Router 6**: Client-side routing
+- **Tailwind CSS**: Utility-first CSS framework
+- **Framer Motion**: Animation library
+- **Axios**: HTTP client
+- **Formik & Yup**: Form handling and validation
+- **React Toastify**: Toast notifications
+- **JWT Decode**: JWT token handling
+- **Date-fns**: Date manipulation library
 
 ## Getting Started
 
@@ -37,67 +32,59 @@ This is a modern responsive React frontend for the EventHub application, a full-
 
 ### Installation
 
-1. Clone the repository
-2. Navigate to the frontend directory:
+1. Navigate to the frontend directory:
    ```
    cd react-frontend
    ```
-3. Install dependencies:
+
+2. Install dependencies:
    ```
    npm install
    ```
-4. Copy the environment example file and modify as needed:
+
+3. Create a `.env` file:
    ```
-   cp .env.example .env
+ REACT_APP_API_BASE_URL=http://localhost:5001/api
+REACT_APP_API_BACKEND=node
    ```
-5. Start the development server:
+
+4. Start the development server:
    ```
    npm start
    ```
-6. Open your browser and navigate to `http://localhost:3000`
 
-## Environment Configuration
-
-The `.env` file controls which backend the frontend communicates with:
-<!-- 
-```
-# API Configuration
-VITE_API_URL=http://localhost:5000/api
-VITE_API_BACKEND=node
-``` -->
-
-- Set `VITE_API_BACKEND` to `node` for the Node.js backend or `java` for the Java backend
-- Node.js backend runs on port 5000 by default
-- Java backend runs on port 5001 by default
+5. Open your browser and navigate to `http://localhost:5173`
 
 ## Building for Production
 
-To create a production build:
-
-```
+```bash
 npm run build
 ```
 
 This will generate optimized files in the `dist` directory.
 
-## Docker Deployment
+## Available Scripts
 
-A Dockerfile is included for containerized deployment:
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
 
-```
-docker build -t eventhub-frontend .
-docker run -p 3000:80 -e BACKEND_URL=http://backend:5000 eventhub-frontend
-```
+## Environment Variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| REACT_APP_API_BASE_URL | Backend API URL | http://localhost:5001/api |
+| REACT_APP_API_BACKEND | Backend type (node or java) | node |
 
 ## Project Structure
 
 ```
 src/
-├── assets/           # Static assets like images
+├── assets/           # Static assets
 ├── components/       # Reusable UI components
 │   ├── auth/         # Authentication-related components
 │   ├── events/       # Event-related components
-│   ├── layout/       # Layout components like Header and Footer
+│   ├── layout/       # Layout components
 │   └── ui/           # Generic UI components
 ├── context/          # React context providers
 ├── hooks/            # Custom React hooks
@@ -108,12 +95,12 @@ src/
 
 ## Backend Compatibility
 
-This frontend is designed to work with both backends:
+This frontend works with both backend implementations:
 
-- **Node.js Backend**: Uses Express.js and Sequelize with PostgreSQL
-- **Java Backend**: Uses Spring Boot and JPA with PostgreSQL
+- **Node.js Backend**: Express.js and Sequelize with PostgreSQL
+- **Java Backend**: Spring Boot and JPA with PostgreSQL
 
-The frontend automatically adapts to the backend being used through service adapters and environment configuration.
+The frontend automatically adapts to the backend being used through the `REACT_APP_API_BACKEND` environment variable.
 
 ## Customization
 
@@ -122,21 +109,21 @@ The frontend automatically adapts to the backend being used through service adap
 - Colors can be customized in `tailwind.config.js`
 - Component styles can be modified in `src/index.css`
 
-### Adding New Features
+## Troubleshooting
 
-1. Create new components in the appropriate directory
-2. Add new API services in the services directory
-3. Update or create new pages as needed
-4. Add new routes to `App.jsx`
+### Common Issues
 
-## Browser Support
+1. **API Connection Problems**:
+   - Check if the backend server is running
+   - Verify that the `REACT_APP_API_BASE_URL` points to the correct backend
 
-- Chrome (latest)
-- Firefox (latest)
-- Safari (latest)
-- Edge (latest)
-- Mobile browsers on iOS and Android
+2. **Authentication Issues**:
+   - Check browser console for token-related errors
+   - Clear localStorage and try logging in again
 
-## License
+3. **CORS Errors**:
+   - Ensure the backend has CORS enabled for your frontend URL
 
-This project is licensed under the MIT License.
+4. **Build Errors**:
+   - Check Node.js version (16+ required)
+   - Delete `node_modules` and reinstall dependencies
