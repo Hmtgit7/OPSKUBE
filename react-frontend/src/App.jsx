@@ -1,3 +1,4 @@
+// src/App.jsx
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -16,9 +17,15 @@ import MyEventsPage from './pages/MyEventsPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ProfilePage from './pages/ProfilePage';
-
 // Import global CSS
 import './index.css';
+
+// Initialize API debugger in development mode
+import initApiDebugger from './utils/apiDebug';
+if (process.env.NODE_ENV === 'development') {
+    initApiDebugger();
+}
+
 
 function App() {
     return (

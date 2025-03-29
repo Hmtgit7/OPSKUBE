@@ -1,29 +1,21 @@
 // src/services/rsvpService.js
 import api, { getBackendType } from './api';
+import rsvpCache from './rsvpCache';
 
 // Create or update RSVP for an event
 export const createRsvp = async (eventId, status) => {
     try {
-        // Handle status format differently for Java backend
-        let rsvpData = { status };
+        const response = await api.post(`/events/${eventId}/rsvp`, { status });
 
-        if (getBackendType() === 'java') {
-            // Java backend expects status in uppercase
-            rsvpData.status = status.toUpperCase();
-        }
+        // Update cache
+        rsvpCache.setStatus(eventId, status);
 
-        const response = await api.post(`/events/${eventId}/rsvp`, rsvpData);
-
-        // Return standardized response
-        return {
-            message: response.data.message,
-            rsvp: response.data.rsvp
-        };
+        return response.data;
     } catch (error) {
-        console.error(`RSVP to event ${eventId} error:`, error);
         throw error;
     }
 };
+
 
 // Get all RSVPs for an event (organizer only)
 export const getEventRsvps = async (eventId) => {
@@ -41,21 +33,25 @@ export const getEventRsvps = async (eventId) => {
 // Get current user's RSVP status for an event
 export const getUserRsvpStatus = async (eventId) => {
     try {
+        // Check cache first
+        const cachedStatus = rsvpCache.getStatus(eventId);
+        if (cachedStatus) {
+            return { rsvpStatus: cachedStatus };
+        }
+
+        // If not in cache, fetch from API
         const response = await api.get(`/events/${eventId}/rsvp/me`);
 
-        // Process response based on backend type
-        if (getBackendType() === 'node') {
-            return response.data.rsvpStatus;
-        } else {
-            // Java backend returns object with rsvpStatus property
-            return response.data.rsvpStatus;
+        // Update cache
+        if (response.data.rsvpStatus) {
+            rsvpCache.setStatus(eventId, response.data.rsvpStatus);
         }
+
+        return response.data;
     } catch (error) {
-        // If error is 404, it means no RSVP found, which is ok
         if (error.status === 404) {
-            return null;
+            return { rsvpStatus: null };
         }
-        console.error(`Get RSVP status for event ${eventId} error:`, error);
         throw error;
     }
 };

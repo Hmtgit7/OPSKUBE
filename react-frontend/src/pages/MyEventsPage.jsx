@@ -9,6 +9,7 @@ import Layout from '../components/layout/Layout';
 import EventList from '../components/events/EventList';
 import { toast } from 'react-toastify';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
+import api from '../services/api';
 
 const MyEventsPage = () => {
     const navigate = useNavigate();
@@ -21,6 +22,28 @@ const MyEventsPage = () => {
     const [createdError, setCreatedError] = useState(null);
     const [attendingError, setAttendingError] = useState(null);
 
+    const filterAttendingEvents = async (events) => {
+        if (!events || events.length === 0) return [];
+
+        // For each event, get user's RSVP status
+        const attendingEvents = [];
+        for (const event of events) {
+            try {
+                // Try to get RSVP status
+                const rsvpResponse = await api.get(`/events/${event.id}/rsvp/me`);
+                if (rsvpResponse.data.rsvpStatus === 'attending') {
+                    attendingEvents.push(event);
+                }
+            } catch (error) {
+                // Skip events with no RSVP
+                console.log(`No RSVP for event ${event.id}`);
+            }
+        }
+
+        return attendingEvents;
+    };
+
+
     // Redirect if not authenticated
     useEffect(() => {
         if (!isAuthenticated) {
@@ -29,25 +52,66 @@ const MyEventsPage = () => {
         }
     }, [isAuthenticated, navigate]);
 
+    // Normalize events data based on different possible response formats
+    const normalizeEventsData = (data) => {
+        // Helper function to check if something is an event object
+        const isEventObject = (obj) => {
+            return obj && typeof obj === 'object' &&
+                (obj.name !== undefined || obj.title !== undefined) &&
+                (obj.date !== undefined || obj.eventDate !== undefined);
+        };
+
+        console.log('Normalizing data:', data);
+
+        // If data is null or undefined, return empty array
+        if (!data) return [];
+
+        // If data is already an array, check if it contains events
+        if (Array.isArray(data)) {
+            // If first item looks like an event, return the array
+            if (data.length > 0 && isEventObject(data[0])) {
+                return data;
+            }
+        }
+
+        // Check common response formats
+        if (data.events && Array.isArray(data.events)) {
+            return data.events;
+        }
+
+        if (data.content && Array.isArray(data.content)) {
+            return data.content;
+        }
+
+        if (data.data && Array.isArray(data.data)) {
+            return data.data;
+        }
+
+        if (data.items && Array.isArray(data.items)) {
+            return data.items;
+        }
+
+        // If we can't determine the format, return empty array
+        console.warn('Could not normalize events data:', data);
+        return [];
+    };
+
     // Fetch created events
     useEffect(() => {
         const fetchCreatedEvents = async () => {
+            if (!isAuthenticated) return;
+
             setCreatedLoading(true);
             setCreatedError(null);
 
             try {
                 const data = await getMyEvents();
-                console.log('My events data:', data);
+                console.log('My events raw data:', data);
 
-                // Handle different response formats
-                let eventsArray = data;
-                if (Array.isArray(data.events)) {
-                    eventsArray = data.events;
-                } else if (data.content && Array.isArray(data.content)) {
-                    eventsArray = data.content;
-                }
+                const normalizedEvents = normalizeEventsData(data);
+                console.log('Normalized created events:', normalizedEvents);
 
-                setCreatedEvents(Array.isArray(eventsArray) ? eventsArray : []);
+                setCreatedEvents(normalizedEvents);
             } catch (err) {
                 console.error('Failed to load created events:', err);
                 setCreatedError('Failed to load your created events. Please try again.');
@@ -57,42 +121,91 @@ const MyEventsPage = () => {
             }
         };
 
-        if (isAuthenticated) {
-            fetchCreatedEvents();
-        }
+        fetchCreatedEvents();
     }, [isAuthenticated]);
 
     // Fetch attending events
     useEffect(() => {
         const fetchAttendingEvents = async () => {
+            if (!isAuthenticated) return;
+
             setAttendingLoading(true);
             setAttendingError(null);
 
             try {
-                const data = await getAttendingEvents();
-                console.log('Attending events data:', data);
+                // First try to get events from the attending endpoint
+                let data = await getAttendingEvents();
+                console.log('Attending events raw data:', data);
 
-                // Handle different response formats
-                let eventsArray = data;
-                if (Array.isArray(data.events)) {
-                    eventsArray = data.events;
-                } else if (data.content && Array.isArray(data.content)) {
-                    eventsArray = data.content;
+                // Check if we got a proper response or if we need to filter manually
+                if (data && data.events && Array.isArray(data.events)) {
+                    // We got all events instead of just attending ones, need to filter
+                    console.log('Got all events, filtering client-side...');
+
+                    const eventsToFilter = data.events;
+                    const attendingEventsList = [];
+
+                    // Get user's RSVPs for each event
+                    for (const event of eventsToFilter) {
+                        try {
+                            const rsvpResponse = await api.get(`/events/${event.id}/rsvp/me`);
+                            if (rsvpResponse.data &&
+                                rsvpResponse.data.rsvpStatus === 'attending') {
+                                attendingEventsList.push(event);
+                            }
+                        } catch (rsvpError) {
+                            // No RSVP for this event, skip it
+                            console.log(`No RSVP for event ${event.id}`, rsvpError);
+                        }
+                    }
+
+                    console.log(`Filtered ${eventsToFilter.length} events down to ${attendingEventsList.length} attending events`);
+                    setAttendingEvents(attendingEventsList);
+                } else {
+                    // We got a proper response from the attending endpoint
+                    const normalizedEvents = normalizeEventsData(data);
+                    console.log('Normalized attending events:', normalizedEvents);
+                    setAttendingEvents(normalizedEvents);
                 }
-
-                setAttendingEvents(Array.isArray(eventsArray) ? eventsArray : []);
             } catch (err) {
                 console.error('Failed to load attending events:', err);
                 setAttendingError('Failed to load events you\'re attending. Please try again.');
                 toast.error('Failed to load events you\'re attending');
+
+                // Fallback: try to get all events and check RSVPs
+                try {
+                    console.log('Trying fallback method for attending events...');
+                    const eventsResponse = await api.get('/events');
+                    if (eventsResponse.data && eventsResponse.data.events) {
+                        const allEvents = eventsResponse.data.events;
+                        const attendingEventsList = [];
+
+                        // Check each event for RSVP status
+                        for (const event of allEvents) {
+                            try {
+                                const rsvpResponse = await api.get(`/events/${event.id}/rsvp/me`);
+                                if (rsvpResponse.data &&
+                                    rsvpResponse.data.rsvpStatus === 'attending') {
+                                    attendingEventsList.push(event);
+                                }
+                            } catch (rsvpError) {
+                                // Skip events with no RSVP
+                            }
+                        }
+
+                        console.log(`Fallback found ${attendingEventsList.length} attending events`);
+                        setAttendingEvents(attendingEventsList);
+                        setAttendingError(null); // Clear error if fallback worked
+                    }
+                } catch (fallbackErr) {
+                    console.error('Fallback method also failed:', fallbackErr);
+                }
             } finally {
                 setAttendingLoading(false);
             }
         };
 
-        if (isAuthenticated) {
-            fetchAttendingEvents();
-        }
+        fetchAttendingEvents();
     }, [isAuthenticated]);
 
     if (!isAuthenticated) {
@@ -104,6 +217,43 @@ const MyEventsPage = () => {
             </Layout>
         );
     }
+
+    // Retry loading handler
+    const handleRetryCreated = async () => {
+        toast.info('Retrying to load your created events...');
+        setCreatedLoading(true);
+        setCreatedError(null);
+
+        try {
+            const data = await getMyEvents();
+            const normalizedEvents = normalizeEventsData(data);
+            setCreatedEvents(normalizedEvents);
+            toast.success('Events loaded successfully!');
+        } catch (err) {
+            setCreatedError('Failed to load your created events. Please try again.');
+            toast.error('Failed to load your created events');
+        } finally {
+            setCreatedLoading(false);
+        }
+    };
+
+    const handleRetryAttending = async () => {
+        toast.info('Retrying to load events you\'re attending...');
+        setAttendingLoading(true);
+        setAttendingError(null);
+
+        try {
+            const data = await getAttendingEvents();
+            const normalizedEvents = normalizeEventsData(data);
+            setAttendingEvents(normalizedEvents);
+            toast.success('Events loaded successfully!');
+        } catch (err) {
+            setAttendingError('Failed to load events you\'re attending. Please try again.');
+            toast.error('Failed to load events you\'re attending');
+        } finally {
+            setAttendingLoading(false);
+        }
+    };
 
     return (
         <Layout>
@@ -157,6 +307,16 @@ const MyEventsPage = () => {
                                     error={createdError}
                                     emptyMessage="You haven't created any events yet. Click 'Create Event' to get started!"
                                 />
+                                {createdError && (
+                                    <div className="mt-4 flex justify-center">
+                                        <button
+                                            onClick={handleRetryCreated}
+                                            className="btn-primary"
+                                        >
+                                            Retry Loading Events
+                                        </button>
+                                    </div>
+                                )}
                             </Tab.Panel>
                             <Tab.Panel>
                                 <EventList
@@ -165,6 +325,16 @@ const MyEventsPage = () => {
                                     error={attendingError}
                                     emptyMessage="You're not attending any events yet. Browse events to find some you'd like to attend!"
                                 />
+                                {attendingError && (
+                                    <div className="mt-4 flex justify-center">
+                                        <button
+                                            onClick={handleRetryAttending}
+                                            className="btn-primary"
+                                        >
+                                            Retry Loading Events
+                                        </button>
+                                    </div>
+                                )}
                             </Tab.Panel>
                         </Tab.Panels>
                     </Tab.Group>

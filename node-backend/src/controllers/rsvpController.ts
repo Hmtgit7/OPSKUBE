@@ -3,20 +3,22 @@ import { Event, RSVP, User } from '../models';
 import { AppError, handleError } from '../utils/errorUtils';
 
 // RSVP to an event
+// Create or update RSVP for an event
 export const createRsvp = async (req: Request, res: Response) => {
     try {
         const { id: eventId } = req.params;
         const { status } = req.body;
         const userId = req.user.id;
 
+        console.log(`Creating/updating RSVP - Event: ${eventId}, User: ${userId}, Status: ${status}`);
+
         // Check if event exists
         const event = await Event.findByPk(eventId);
-
         if (!event) {
-            throw new AppError('Event not found', 404);
+            return res.status(404).json({ message: 'Event not found' });
         }
 
-        // Check if user already RSVPed to this event
+        // Check if RSVP already exists
         let rsvp = await RSVP.findOne({
             where: {
                 userId,
@@ -26,27 +28,35 @@ export const createRsvp = async (req: Request, res: Response) => {
 
         if (rsvp) {
             // Update existing RSVP
+            console.log(`Updating RSVP from ${rsvp.status} to ${status}`);
             await rsvp.update({ status });
-
-            return res.status(200).json({
-                message: 'RSVP updated successfully',
-                rsvp
-            });
         } else {
             // Create new RSVP
+            console.log(`Creating new RSVP with status ${status}`);
             rsvp = await RSVP.create({
                 userId,
                 eventId: parseInt(eventId, 10),
                 status
             });
-
-            return res.status(201).json({
-                message: 'RSVP created successfully',
-                rsvp
-            });
         }
+
+        // Verify the update worked
+        const updatedRsvp = await RSVP.findOne({
+            where: {
+                userId,
+                eventId
+            }
+        });
+
+        console.log(`RSVP after save: ${updatedRsvp?.status}`);
+
+        return res.status(200).json({
+            message: rsvp ? 'RSVP updated successfully' : 'RSVP created successfully',
+            rsvp: updatedRsvp
+        });
     } catch (error) {
-        return handleError(error, res);
+        console.error('RSVP error:', error);
+        return res.status(500).json({ message: 'Error creating/updating RSVP' });
     }
 };
 

@@ -21,6 +21,7 @@ class RSVP extends Model<RSVPAttributes, RSVPCreationAttributes> implements RSVP
     public status!: 'attending' | 'maybe' | 'declined';
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
+    public Event?: Event;
 }
 
 RSVP.init(
@@ -49,7 +50,7 @@ RSVP.init(
         status: {
             type: DataTypes.ENUM('attending', 'maybe', 'declined'),
             allowNull: false,
-            defaultValue: 'attending',
+            defaultValue: 'attending'
         },
     },
     {

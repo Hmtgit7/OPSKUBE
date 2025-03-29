@@ -12,7 +12,7 @@
   },
   "include": [
     "src/**/*"
-  ],
+, "../react-frontend/src/utils/apiDebug.js"  ],
   "exclude": [
     "node_modules"
   ]

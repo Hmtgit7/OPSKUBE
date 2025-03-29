@@ -86,22 +86,32 @@ export const deleteEvent = async (id) => {
 // Get current user's events
 export const getMyEvents = async () => {
     try {
-        const backendType = getBackendType();
+        // Try multiple possible endpoints in sequence until one works
+        const endpoints = [
+            '/events/my-events',
+            '/my-events',
+            '/events?owner=me',
+            '/events/user/me'
+        ];
 
-        // Different endpoints for different backends
-        const endpoint = backendType === 'node' ? '/events/my-events' : '/events/my-events';
+        let lastError = null;
 
-        // Attempt to use the endpoint
-        try {
-            const response = await api.get(endpoint);
-            return response.data;
-        } catch (firstError) {
-            // If the first endpoint fails, try an alternative endpoint
-            console.warn(`First endpoint failed: ${endpoint}, trying alternative...`);
-            const altEndpoint = '/my-events';
-            const response = await api.get(altEndpoint);
-            return response.data;
+        // Try each endpoint in sequence
+        for (const endpoint of endpoints) {
+            try {
+                console.log(`Attempting to fetch my events from: ${endpoint}`);
+                const response = await api.get(endpoint);
+                console.log(`Success with endpoint ${endpoint}:`, response.data);
+                return response.data;
+            } catch (error) {
+                console.warn(`Endpoint ${endpoint} failed:`, error);
+                lastError = error;
+                // Continue to next endpoint
+            }
         }
+
+        // If we get here, all endpoints failed
+        throw lastError || new Error('Failed to fetch created events');
     } catch (error) {
         console.error('Get my events error:', error);
         throw error;
@@ -111,13 +121,47 @@ export const getMyEvents = async () => {
 // Get events the user is attending
 export const getAttendingEvents = async () => {
     try {
-        const backendType = getBackendType();
+        // Use fallback mechanism
+        let response;
+        let error;
 
-        // Different endpoints for different backends
-        const endpoint = backendType === 'node' ? '/events/attending' : '/events/attending';
-        const response = await api.get(endpoint);
+        // Try primary endpoint
+        try {
+            response = await api.get('/events/attending');
+            return response.data;
+        } catch (e) {
+            error = e;
+            console.log('Primary endpoint failed, trying fallback:', e);
 
-        return response.data;
+            // Try alternative approach - create a custom attending endpoint
+            try {
+                // Get all user RSVPs with 'attending' status
+                const rsvpsResponse = await api.get('/events');
+                const allEvents = rsvpsResponse.data.events;
+
+                // Since the backend isn't filtering properly, we'll do it client-side
+                // by fetching events the user has explicitly marked as attending
+
+                // For each event, check if the user has RSVPed
+                const attendingEvents = [];
+                for (const event of allEvents) {
+                    try {
+                        const rsvpResponse = await api.get(`/events/${event.id}/rsvp/me`);
+                        if (rsvpResponse.data.rsvpStatus === 'attending') {
+                            attendingEvents.push(event);
+                        }
+                    } catch (rsvpError) {
+                        // Skip if no RSVP found
+                        continue;
+                    }
+                }
+
+                return attendingEvents;
+            } catch (fallbackError) {
+                console.error('All fallback attempts failed:', fallbackError);
+                throw error; // Throw the original error
+            }
+        }
     } catch (error) {
         console.error('Get attending events error:', error);
         throw error;

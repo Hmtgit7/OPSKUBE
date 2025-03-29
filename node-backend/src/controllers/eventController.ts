@@ -1,7 +1,7 @@
 // src/controllers/eventController.ts
 import { Request, Response } from 'express';
 import { Op } from 'sequelize';
-import { Event, User } from '../models';
+import { Event, RSVP, User } from '../models';
 import { AppError, handleError } from '../utils/errorUtils';
 
 // Get all events with pagination and search
@@ -212,9 +212,34 @@ export const deleteEvent = async (req: Request, res: Response) => {
 };
 
 // Get events created by current user
+// export const getMyEvents = async (req: Request, res: Response) => {
+//     try {
+//         const userId = req.user.id;
+
+//         const events = await Event.findAll({
+//             where: { userId },
+//             include: [
+//                 {
+//                     model: User,
+//                     as: 'organizer',
+//                     attributes: ['id', 'username']
+//                 }
+//             ],
+//             order: [['date', 'ASC']]
+//         });
+
+//         return res.status(200).json(events);
+//     } catch (error) {
+//         console.error('Error in getMyEvents:', error);
+//         return handleError(error, res);
+//     }
+// };
+
 export const getMyEvents = async (req: Request, res: Response) => {
     try {
         const userId = req.user.id;
+
+        console.log(`Fetching events for user ID: ${userId}`);
 
         const events = await Event.findAll({
             where: { userId },
@@ -228,6 +253,7 @@ export const getMyEvents = async (req: Request, res: Response) => {
             order: [['date', 'ASC']]
         });
 
+        console.log(`Found ${events.length} events created by the user`);
         return res.status(200).json(events);
     } catch (error) {
         console.error('Error in getMyEvents:', error);

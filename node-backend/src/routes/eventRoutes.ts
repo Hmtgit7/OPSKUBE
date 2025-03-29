@@ -21,11 +21,11 @@ const router = Router();
 // Get all events (pagination, optional authentication)
 router.get('/', validatePagination, optionalAuthenticateToken, getAllEvents);
 
-// Get single event by id (optional authentication)
-router.get('/:id', optionalAuthenticateToken, getEventById);
-
 // Get events created by the authenticated user
 router.get('/my-events', authenticateToken, getMyEvents);
+
+// Get single event by id (optional authentication)
+router.get('/:id', optionalAuthenticateToken, getEventById);
 
 // Create new event (requires authentication)
 router.post('/', authenticateToken, validate(createEventValidation), createEvent);
