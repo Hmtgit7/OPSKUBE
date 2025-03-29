@@ -1,8 +1,7 @@
-import { createContext, useContext, useReducer, useEffect } from 'react';
+import { createContext, useContext, useReducer, useEffect, useCallback } from 'react';
 import {
     register as registerService,
     login as loginService,
-    getCurrentUser,
     getStoredUser,
     isTokenValid,
     logout as logoutService
@@ -10,9 +9,9 @@ import {
 
 // Initial state
 const initialState = {
-    user: null,
-    isAuthenticated: false,
-    isLoading: true,
+    user: getStoredUser(),
+    isAuthenticated: isTokenValid(),
+    isLoading: false,
     error: null
 };
 
@@ -103,46 +102,8 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
     const [state, dispatch] = useReducer(authReducer, initialState);
 
-    // Check if user is already authenticated on mount
-    useEffect(() => {
-        const initAuth = async () => {
-            dispatch({ type: AUTH_ACTIONS.INIT_START });
-
-            try {
-                // Check if token is valid
-                if (isTokenValid()) {
-                    // Try to get fresh user data from API
-                    try {
-                        const userData = await getCurrentUser();
-                        dispatch({
-                            type: AUTH_ACTIONS.INIT_SUCCESS,
-                            payload: userData
-                        });
-                    } catch (error) {
-                        // If API call fails, use stored user data
-                        const storedUser = getStoredUser();
-                        if (storedUser) {
-                            dispatch({
-                                type: AUTH_ACTIONS.INIT_SUCCESS,
-                                payload: storedUser
-                            });
-                        } else {
-                            dispatch({ type: AUTH_ACTIONS.INIT_FAILURE });
-                        }
-                    }
-                } else {
-                    dispatch({ type: AUTH_ACTIONS.INIT_FAILURE });
-                }
-            } catch (error) {
-                dispatch({ type: AUTH_ACTIONS.INIT_FAILURE });
-            }
-        };
-
-        initAuth();
-    }, []);
-
     // Register function
-    const register = async (credentials) => {
+    const register = useCallback(async (credentials) => {
         dispatch({ type: AUTH_ACTIONS.REGISTER_START });
 
         try {
@@ -163,10 +124,10 @@ export const AuthProvider = ({ children }) => {
 
             throw error;
         }
-    };
+    }, []);
 
     // Login function
-    const login = async (credentials) => {
+    const login = useCallback(async (credentials) => {
         dispatch({ type: AUTH_ACTIONS.LOGIN_START });
 
         try {
@@ -187,18 +148,18 @@ export const AuthProvider = ({ children }) => {
 
             throw error;
         }
-    };
+    }, []);
 
     // Logout function
-    const logout = () => {
+    const logout = useCallback(() => {
         logoutService();
         dispatch({ type: AUTH_ACTIONS.LOGOUT });
-    };
+    }, []);
 
     // Clear error
-    const clearError = () => {
+    const clearError = useCallback(() => {
         dispatch({ type: AUTH_ACTIONS.CLEAR_ERROR });
-    };
+    }, []);
 
     // Context value
     const value = {
