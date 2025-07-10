@@ -11,16 +11,23 @@ const dbPort = process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 5432;
 const dbDialect = process.env.DB_DIALECT || 'postgres';
 
 const sequelize = new Sequelize(dbName, dbUser, dbPassword, {
-    host: dbHost,
-    port: dbPort,
-    dialect: 'postgres',
-    logging: process.env.NODE_ENV === 'development' ? console.log : false,
-    pool: {
-        max: 5,
-        min: 0,
-        acquire: 30000,
-        idle: 10000
-    }
+  host: dbHost,
+  port: dbPort,
+  dialect: 'postgres',
+  logging: process.env.NODE_ENV === 'development' ? console.log : false,
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false, // You can change to true if using a trusted CA
+    },
+  },
+  pool: {
+    max: 5,
+    min: 0,
+    acquire: 30000,
+    idle: 10000,
+  },
 });
+
 
 export default sequelize;
